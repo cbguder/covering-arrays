@@ -20,8 +20,8 @@ class Test:
 					all_hold = False
 					break
 			if all_hold:
-				return 'FAIL: ' + pattern.result
-		return 'PASS'
+				return pattern.result
+		return 'p'
 
 class FailurePattern:
 	def __init__(self, node):
