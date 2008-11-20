@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<patterns>
+	<test name="t1">
+		<pattern result="e1">
+			<option name="o1">0</option>
+			<option name="o2">1</option>
+		</pattern>
+		<pattern result="e2">
+			<option name="o2">1</option>
+			<option name="o3">0</option>
+		</pattern>
+	</test>
+	<test name="t2">
+		<pattern result="e3">
+			<option name="o8">1</option>
+			<option name="o9">0</option>
+		</pattern>
+		<pattern result="e2">
+			<option name="o5">0</option>
+			<option name="o7">1</option>
+		</pattern>
+	</test>
+</patterns>

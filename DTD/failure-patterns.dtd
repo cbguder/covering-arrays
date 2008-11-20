@@ -1,0 +1,10 @@
+<!ELEMENT patterns (test*)>
+
+<!ELEMENT test (pattern*)>
+<!ATTLIST test name ID #REQUIRED>
+
+<!ELEMENT pattern (option*)>
+<!ATTLIST pattern result CDATA #REQUIRED>
+
+<!ELEMENT option (#PCDATA)>
+<!ATTLIST option name CDATA #REQUIRED>

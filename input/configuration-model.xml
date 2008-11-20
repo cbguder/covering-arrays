@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<options>
+	<option name="o1">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o2">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o3">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o4">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o5">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o6">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o7">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o8">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o9">
+		<value>0</value>
+		<value>1</value>
+	</option>
+	<option name="o10">
+		<value>0</value>
+		<value>1</value>
+	</option>
+</options>

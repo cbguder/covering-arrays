@@ -1,0 +1,6 @@
+<!ELEMENT options (option*)>
+
+<!ELEMENT option (value*)>
+<!ATTLIST option name ID #REQUIRED>
+
+<!ELEMENT value (#PCDATA)>
