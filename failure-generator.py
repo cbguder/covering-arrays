@@ -4,8 +4,7 @@ import sys
 import random
 from optparse import OptionParser
 
-from models.failure import *
-from models.configuration import *
+from models import *
 
 def main():
 	parser = OptionParser(usage='Usage: %prog [options] CONFIGURATION_MODEL',

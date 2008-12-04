@@ -1,3 +1,4 @@
 #!/usr/bin/env python
 
-__all__ = ['configuration', 'failure']
+from configuration import *
+from failure import *

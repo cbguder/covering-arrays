@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 import random
-from xml.dom.minidom import Document, parse
+from xml.dom.minidom import Document
+from xml.dom.minidom import parse as _parse
 
 class FailureModel:
 	def __init__(self):
@@ -9,7 +10,7 @@ class FailureModel:
 
 	def from_xml(xml_file):
 		model = FailureModel()
-		dom   = parse(xml_file)
+		dom   = _parse(xml_file)
 		tests = dom.getElementsByTagName('test')
 
 		for test in tests:

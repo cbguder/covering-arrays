@@ -5,8 +5,7 @@ from csv import DictReader
 from optparse import OptionParser
 from xml.dom.minidom import Document
 
-from models.failure import *
-from models.configuration import *
+from models import *
 
 def main():
 	parser = OptionParser(usage='Usage: %prog [options] MODEL COVERING_ARRAY FAILURE_PATTERNS',

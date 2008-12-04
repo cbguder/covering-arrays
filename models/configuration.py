@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from xml.dom.minidom import parse
+from xml.dom.minidom import parse as _parse
 
 class ConfigurationModel:
 	def __init__(self):
@@ -8,7 +8,7 @@ class ConfigurationModel:
 
 	def from_xml(xml_file):
 		model   = ConfigurationModel()
-		dom     = parse(xml_file)
+		dom     = _parse(xml_file)
 		options = dom.getElementsByTagName('option')
 
 		for option_node in options:
