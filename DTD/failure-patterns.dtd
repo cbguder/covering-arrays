@@ -4,7 +4,8 @@
 <!ATTLIST test name ID #REQUIRED>
 
 <!ELEMENT pattern (option*)>
-<!ATTLIST pattern result CDATA #REQUIRED>
+<!ATTLIST pattern result      CDATA #REQUIRED>
+<!ATTLIST pattern probability CDATA #IMPLIED "1.0">
 
 <!ELEMENT option (#PCDATA)>
 <!ATTLIST option name CDATA #REQUIRED>

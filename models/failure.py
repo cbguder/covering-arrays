@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import random
 from xml.dom.minidom import Document, parse
 
 class FailureModel:
@@ -68,18 +69,24 @@ class Test:
 				if configuration[name] != value:
 					all_hold = False
 					break
-			if all_hold:
+			if all_hold and random.random() < pattern.probability:
 				return pattern.result
 		return 'p'
 
 class FailurePattern:
 	def __init__(self):
-		self.result  = ''
-		self.options = {}
+		self.result      = ''
+		self.probability = 1.0
+		self.options     = {}
 
 	def from_node(node):
 		pattern = FailurePattern()
-		pattern.result = node.getAttribute('result')
+		pattern.result      = node.getAttribute('result')
+		pattern.probability = node.getAttribute('probability')
+		try:
+			pattern.probability = float(pattern.probability)
+		except:
+			pattern.probability = 1.0
 
 		options = node.getElementsByTagName('option')
 		for option in options:
