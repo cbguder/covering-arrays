@@ -12,7 +12,7 @@ class FailureModel:
 		tests = dom.getElementsByTagName('test')
 
 		for test in tests:
-			model.tests.append(Test(test))
+			model.tests.append(Test.from_node(test))
 		dom.unlink()
 
 		return model
@@ -45,13 +45,20 @@ class FailureModel:
 		return doc.toxml()
 
 class Test:
-	def __init__(self, node):
-		self.name     = node.attributes.item(0).nodeValue
+	def __init__(self):
+		self.name     = ''
 		self.patterns = []
+
+	def from_node(node):
+		test = Test()
+		test.name = node.attributes.item(0).nodeValue
 
 		patterns = node.getElementsByTagName('pattern')
 		for pattern in patterns:
-			self.patterns.append(FailurePattern(pattern))
+			test.patterns.append(FailurePattern.from_node(pattern))
+
+		return test
+	from_node = staticmethod(from_node)
 
 	def run_with_configuration(self, configuration):
 		# TODO: What if it holds for more than one pattern?
@@ -66,12 +73,19 @@ class Test:
 		return 'p'
 
 class FailurePattern:
-	def __init__(self, node):
-		self.result  = node.attributes.item(0).nodeValue
+	def __init__(self):
+		self.result  = ''
 		self.options = {}
+
+	def from_node(node):
+		pattern = FailurePattern()
+		pattern.result = node.attributes.item(0).nodeValue		
 
 		options = node.getElementsByTagName('option')
 		for option in options:
 			name  = option.attributes.item(0).nodeValue
 			value = option.firstChild.nodeValue
-			self.options[name] = value
+			pattern.options[name] = value
+
+		return pattern
+	from_node = staticmethod(from_node)
