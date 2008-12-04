@@ -2,6 +2,16 @@
 
 from xml.dom.minidom import parse
 
+class FailureModel:
+	def __init__(self, xml_file):
+		self.tests = []
+
+		dom = parse(xml_file)
+		tests = dom.getElementsByTagName('test')
+		for test in tests:
+			self.tests.append(Test(test))
+		dom.unlink()
+
 class Test:
 	def __init__(self, node):
 		self.name     = node.attributes.item(0).nodeValue

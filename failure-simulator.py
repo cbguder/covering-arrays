@@ -22,15 +22,15 @@ def main():
 
 	config_model   = ConfigurationModel(args[0])
 	covering_array = parse_csv(args[1])
-	fail_patterns  = parse_failure_patterns(args[2])
+	failure_model  = FailureModel(args[2])
 
-	test_runs = generate_test_runs(config_model, covering_array, fail_patterns)
+	test_runs = generate_test_runs(config_model, covering_array, failure_model.tests)
 
 	if options.format == 'table':
-		table  = generate_table(test_runs, config_model.options, fail_patterns)
+		table  = generate_table(test_runs, config_model.options, failure_model.tests)
 		output = array_to_ascii_table(table)
 	elif options.format == 'arff':
-		output = generate_arff(test_runs, config_model.options, fail_patterns)
+		output = generate_arff(test_runs, config_model.options, failure_model.tests)
 	elif options.format == 'xml':
 		output = generate_xml(test_runs).toxml()
 
