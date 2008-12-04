@@ -3,14 +3,20 @@
 from xml.dom.minidom import parse
 
 class ConfigurationModel:
-	def __init__(self, xml_file):
+	def __init__(self):
 		self.options = []
 
-		dom = parse(xml_file)
+	def from_xml(xml_file):
+		model   = ConfigurationModel()
+		dom     = parse(xml_file)
 		options = dom.getElementsByTagName('option')
+
 		for option_node in options:
-			self.options.append(Option(option_node))
+			model.options.append(Option(option_node))
 		dom.unlink()
+
+		return model		
+	from_xml = staticmethod(from_xml)
 
 class Option:
 	def __init__(self, node):

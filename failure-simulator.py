@@ -3,7 +3,7 @@
 import sys
 from csv import DictReader
 from optparse import OptionParser
-from xml.dom.minidom import Document, parse
+from xml.dom.minidom import Document
 
 from models.failure import *
 from models.configuration import *
@@ -20,9 +20,9 @@ def main():
 	parser.set_defaults(format='table')
 	(options, args) = parser.parse_args()
 
-	config_model   = ConfigurationModel(args[0])
+	config_model   = ConfigurationModel.from_xml(args[0])
 	covering_array = parse_csv(args[1])
-	failure_model  = FailureModel(args[2])
+	failure_model  = FailureModel.from_xml(args[2])
 
 	test_runs = generate_test_runs(config_model, covering_array, failure_model.tests)
 
@@ -171,16 +171,6 @@ def parse_csv(file):
 	f.close()
 
 	return rows
-
-def parse_failure_patterns(file):
-	tests = []
-	dom   = parse(file)
-
-	test_nodes = dom.getElementsByTagName('test')
-	for test in test_nodes:
-		tests.append(Test(test))
-	
-	return tests
 
 if __name__ == '__main__':
 	main()
