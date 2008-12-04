@@ -134,7 +134,6 @@ def generate_xml(test_runs):
 	return doc
 
 def generate_arff(test_runs, options, tests):
-	outcomes = set('p')
 	output   = {}
 	common   = []
 
@@ -146,15 +145,15 @@ def generate_arff(test_runs, options, tests):
 		common.append(line)
 
 	for test in tests:
-		for pattern in test.patterns:
-			outcomes.add(pattern.result)
-	
-	line = "@attribute outcome {%s}" % ', '.join(outcomes)
-	common.append(line)
-
-	for test in tests:
 		line = '% Test: ' + test.name
 		result = [line] + common[:]
+
+		outcomes = set('p')
+		for pattern in test.patterns:
+			outcomes.add(pattern.result)
+		line = "@attribute outcome {%s}" % ', '.join(outcomes)
+		result.append(line)
+
 		result.append('@data')
 		for test_run in test_runs:
 			line = ','.join([test_run['configuration'][option.name] for option in options])
