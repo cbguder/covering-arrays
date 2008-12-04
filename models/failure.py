@@ -51,7 +51,7 @@ class Test:
 
 	def from_node(node):
 		test = Test()
-		test.name = node.attributes.item(0).nodeValue
+		test.name = node.getAttribute('name')
 
 		patterns = node.getElementsByTagName('pattern')
 		for pattern in patterns:
@@ -79,11 +79,11 @@ class FailurePattern:
 
 	def from_node(node):
 		pattern = FailurePattern()
-		pattern.result = node.attributes.item(0).nodeValue		
+		pattern.result = node.getAttribute('result')
 
 		options = node.getElementsByTagName('option')
 		for option in options:
-			name  = option.attributes.item(0).nodeValue
+			name  = option.getAttribute('name')
 			value = option.firstChild.nodeValue
 			pattern.options[name] = value
 

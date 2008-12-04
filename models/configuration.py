@@ -20,7 +20,7 @@ class ConfigurationModel:
 
 class Option:
 	def __init__(self, node):
-		self.name   = node.attributes.item(0).nodeValue
+		self.name   = node.getAttribute('name')
 		self.values = []
 
 		values = node.getElementsByTagName('value')
