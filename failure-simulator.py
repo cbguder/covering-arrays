@@ -13,7 +13,7 @@ def main():
 	                      version='%prog 0.2')
 	parser.add_option('-o', '--output',
 	                  metavar='FILE',
-	                  help='output file [default: STDOUT]')
+	                  help='output file (or basename for arff) [default: STDOUT]')
 	parser.add_option('-f', '--format',
 	                  choices=['xml', 'arff', 'table'],
 	                  help='output format: xml, arff or table [default: table]')
@@ -57,7 +57,8 @@ def main():
 	else:
 		if options.format == 'arff':
 			for k, v in output.iteritems():
-				f = open(options.output + '.' + k, 'w')
+				filename = '%s.%s.arff' % (options.output, k)
+				f = open(filename, 'w')
 				f.write(v)
 				f.write('\n')
 				f.close()
