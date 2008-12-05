@@ -12,16 +12,13 @@ def main():
 	parser.add_option('-t', '--tests',
 	                  type='int',
 	                  metavar='NUM',
-	                  help='number of tests (defaults to 2)')
+	                  help='number of tests [default: 2]')
 	parser.add_option('-e', '--errors',
 	                  type='int',
 	                  metavar='NUM',
-	                  help='number of errors (defaults to 4)')
-	parser.add_option('-o', '--output',
-	                  metavar='FILE',
-	                  help='output file (defaults to STDOUT)')
+	                  help='number of errors [default: 4]')
 	parser.add_option('-f', '--failures',
-	                  help='number and size of failures (e.g. 2x2,3x5, defaults to 2x2)')
+	                  help='number and size of failures (e.g. 2x2,3x5) [default: 2x2]')
 	parser.set_defaults(errors=4, tests=2)
 	(options, args) = parser.parse_args()
 	

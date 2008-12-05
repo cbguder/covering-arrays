@@ -13,13 +13,14 @@ def main():
 	                      version='%prog 0.2')
 	parser.add_option('-o', '--output',
 	                  metavar='FILE',
-	                  help='output file (defaults to STDOUT)')
+	                  help='output file [default: STDOUT]')
 	parser.add_option('-f', '--format',
 	                  choices=['xml', 'arff', 'table'],
 	                  help='output format: xml, arff or table [default: table]')
 	parser.add_option('--no-errors',
 	                  action='store_false',
-	                  dest='errors')
+	                  dest='errors',
+					  help='generate ARFF output for each test only')
 	parser.set_defaults(format='table', errors=True)
 	(options, args) = parser.parse_args()
 
