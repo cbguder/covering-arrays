@@ -30,8 +30,8 @@ def main():
 	test_runs = generate_test_runs(config_model, covering_array, failure_model.tests)
 
 	if options.format == 'table':
-		table  = generate_table(test_runs, config_model.options, failure_model.tests)
-		output = array_to_ascii_table(table)
+		generator = TableGenerator(config_model.options, failure_model.tests, test_runs)
+		output = generator.generate()
 	elif options.format == 'arff':
 		generator = ARFFGenerator(config_model.options, test_runs)
 		output = {}
@@ -43,7 +43,8 @@ def main():
 			else:
 				output[test.name] = generator.generate(test)
 	elif options.format == 'xml':
-		output = generate_xml(test_runs).toxml()
+		generator = XMLGenerator(test_runs)
+		output = generator.generate()
 
 	if options.output == None:
 		if options.format == 'arff':
@@ -73,76 +74,8 @@ def generate_test_runs(configuration_model, covering_array, failure_patterns):
 			result = test.run_with_configuration(test_configuration)
 			test_run['results'][test.name] = result
 			test_runs.append(test_run)
-	
+
 	return test_runs
-
-def generate_table(test_runs, options, tests):
-	table = []
-
-	h_options = [option.name for option in options]
-	h_tests   = [test.name for test in tests]
-
-	header = h_options + h_tests
-	table.append(header)
-
-	for test_run in test_runs:
-		row = []
-		for option in h_options:
-			row.append(test_run['configuration'][option])
-		for test in h_tests:
-			row.append(test_run['results'][test])
-		table.append(row)
-	
-	return table
-
-def array_to_ascii_table(table):
-	output = []
-	num_columns   = len(table[0])
-	column_widths = [max([len(row[i]) for row in table]) for i in range(num_columns)]
-
-	separator = '+-' + '-+-'.join(['-'*column_widths[i] for i in range(num_columns)]) + '-+'
-
-	for row in table:
-		line =  '| ' + ' | '.join([row[i].ljust(column_widths[i]) for i in range(num_columns)]) + ' |'
-		output.append(line)
-	
-	output.insert(0, separator)
-	output.insert(2, separator)
-	output.append(separator)
-
-	return '\n'.join(output)
-
-def generate_xml(test_runs):
-	doc  = Document()
-
-	root = doc.createElement('runs')
-	doc.appendChild(root)
-
-	for test_run in test_runs:
-		run           = doc.createElement('run')
-		configuration = doc.createElement('configuration')
-		results       = doc.createElement('results')
-
-		for k, v in test_run['configuration'].iteritems():
-			if k != '':
-				option = doc.createElement('option')
-				option.setAttribute('name', k)
-				value  = doc.createTextNode(v)
-				option.appendChild(value)
-				configuration.appendChild(option)
-
-		for k, v in test_run['results'].iteritems():
-			test = doc.createElement('test')
-			test.setAttribute('name', k)
-			result = doc.createTextNode(v)
-			test.appendChild(result)
-			results.appendChild(test)
-
-		run.appendChild(configuration)
-		run.appendChild(results)
-		root.appendChild(run)
-
-	return doc
 
 def parse_csv(file):
 	f      = open(file, 'rb')
