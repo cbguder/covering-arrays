@@ -1,16 +1,18 @@
 #!/bin/bash
 
-configuration_model="test/input/configuration-model.xml"
-failure_patterns="test/input/failure-patterns.xml"
+input_dir="test/input"
+output_dir="test/output"
+configuration_model="$input_dir/configuration-model.xml"
+failure_patterns="$input_dir/failure-patterns.xml"
 
-for ca in `ls test/input/*.csv`; do
+for ca in `ls $input_dir/*.csv`; do
 	basename=`basename $ca .csv`
-	output="test/output/$basename"
+	output="$output_dir/$basename"
 	./failure-simulator.py -f arff  -o $output       $configuration_model $ca $failure_patterns
 	./failure-simulator.py -f table -o $output.table $configuration_model $ca $failure_patterns
 	./failure-simulator.py -f xml   -o $output.xml   $configuration_model $ca $failure_patterns
 done
 
-for file in `ls test/output/*.arff`; do
-	java -cp vendor/weka/weka.jar weka.classifiers.trees.J48 -t $file -i > $file.tree
+for file in `ls $output_dir/*.arff`; do
+	java weka.classifiers.trees.J48 -t $file -i > $file.tree
 done
