@@ -24,6 +24,10 @@ def main():
 	parser.set_defaults(format='table', errors=True)
 	(options, args) = parser.parse_args()
 
+	if(len(args) < 3):
+		parser.print_help()
+		sys.exit()
+
 	config_model   = ConfigurationModel.from_xml(args[0])
 	covering_array = parse_csv(args[1])
 	failure_model  = FailureModel.from_xml(args[2])
