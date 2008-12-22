@@ -22,7 +22,7 @@ def main():
 	parser.set_defaults(errors=2, tests=2)
 	(options, args) = parser.parse_args()
 
-	if(len(args) < 1):
+	if len(args) < 1:
 		parser.print_help()
 		sys.exit()
 	

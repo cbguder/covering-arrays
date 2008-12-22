@@ -24,7 +24,7 @@ def main():
 	parser.set_defaults(format='table', errors=True)
 	(options, args) = parser.parse_args()
 
-	if(len(args) < 3):
+	if len(args) < 3:
 		parser.print_help()
 		sys.exit()
 
