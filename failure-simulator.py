@@ -8,6 +8,12 @@ from xml.dom.minidom import Document
 from models import *
 from generators import *
 
+use_tidy = True
+try:
+	import tidy
+except ImportError:
+	use_tidy = False
+
 def main():
 	parser = OptionParser(usage='Usage: %prog [options] MODEL COVERING_ARRAY FAILURE_PATTERNS',
 	                      version='%prog 0.2')
@@ -50,6 +56,8 @@ def main():
 	elif options.format == 'xml':
 		generator = XMLGenerator(test_runs)
 		output = generator.generate()
+		if use_tidy:
+			output = str(tidy.parseString(output, input_xml=True, indent=True)).strip()
 
 	if options.output == None:
 		if options.format == 'arff':

@@ -6,6 +6,12 @@ from optparse import OptionParser
 
 from models import *
 
+use_tidy = True
+try:
+	import tidy
+except ImportError:
+	use_tidy = False
+
 def main():
 	parser = OptionParser(usage='Usage: %prog [options] CONFIGURATION_MODEL',
 	                      version='%prog 0.2')
@@ -30,8 +36,12 @@ def main():
 	configuration_model = ConfigurationModel.from_xml(args[0])
 	
 	failure_model = generate_failures(configuration_model.options, options.tests, options.errors, failures)
-	
-	print failure_model.to_xml()
+	output = failure_model.to_xml()
+
+	if use_tidy:
+		print str(tidy.parseString(output, input_xml=True, indent=True)),
+	else:
+		print output
 
 def parse_failures(failures):
 	result = []
