@@ -1,0 +1,9 @@
+<!ELEMENT DecisionTree (Test*)>
+
+<!ELEMENT Test (Test+|Output)>
+<!ATTLIST Test attribute CDATA #REQUIRED>
+<!ATTLIST Test operator  CDATA #REQUIRED>
+<!ATTLIST Test value     CDATA #REQUIRED>
+
+<!ELEMENT Output EMPTY>
+<!ATTLIST Output decision CDATA #REQUIRED>
