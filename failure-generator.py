@@ -2,7 +2,7 @@
 
 import sys
 import random
-from optparse import OptionParser
+from optparse import OptionParser, OptionValueError
 
 from models import *
 
@@ -24,18 +24,20 @@ def main():
 	                  metavar='NUM',
 	                  help='number of errors [default: 2]')
 	parser.add_option('-f', '--failures',
+	                  type='string',
+	                  action='callback',
+	                  callback=parse_failures,
 	                  help='number and size of failures (e.g. 2x2,3x5) [default: 2x2]')
-	parser.set_defaults(errors=2, tests=2)
+	parser.set_defaults(errors=2, tests=2, failures=[(2,2)])
 	(options, args) = parser.parse_args()
 
 	if len(args) < 1:
 		parser.print_help()
 		sys.exit()
 	
-	failures = parse_failures(options.failures)
 	configuration_model = ConfigurationModel.from_xml(args[0])
 	
-	failure_model = generate_failures(configuration_model.options, options.tests, options.errors, failures)
+	failure_model = generate_failures(configuration_model.options, options.tests, options.errors, options.failures)
 	output = failure_model.to_xml()
 
 	if use_tidy:
@@ -43,16 +45,20 @@ def main():
 	else:
 		print output
 
-def parse_failures(failures):
+def parse_failures(option, opt, value, parser):
 	result = []
-	if failures == None:
-		return [(2,2)]
-	parts = failures.split(',')
+	parts = value.split(',')
 	for p in parts:
-		sub_parts = map(int, p.strip().split('x'))
+		try:
+			sub_parts = map(int, p.strip().split('x'))
+		except:
+			raise OptionValueError('option %s: invalid value: %s' % (opt, value))
+
 		if len(sub_parts) == 2:
 			result.append(tuple(sub_parts))
-	return result
+		else:
+			raise OptionValueError('option %s: invalid value: %s' % (opt, value))
+	setattr(parser.values, option.dest, result)
 
 def generate_failures(options, tests, errors, failures):
 	failure_model = FailureModel()
