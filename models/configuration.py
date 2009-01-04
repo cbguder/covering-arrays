@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from xml.dom.minidom import Document
 from xml.dom.minidom import parse as _parse
 
 class ConfigurationModel:
@@ -12,17 +13,42 @@ class ConfigurationModel:
 		options = dom.getElementsByTagName('option')
 
 		for option_node in options:
-			model.options.append(Option(option_node))
+			model.options.append(Option.from_node(option_node))
 		dom.unlink()
 
 		return model		
 	from_xml = staticmethod(from_xml)
 
+	def to_xml(self):
+		doc = Document()
+		root = doc.createElement('options')
+		doc.appendChild(root)
+
+		for option in self.options:
+			option_node = doc.createElement('option')
+			option_node.setAttribute('name', option.name)
+
+			for value in option.values:
+				value_node = doc.createElement('value')
+				value_node.appendChild(doc.createTextNode(str(value)))
+
+				option_node.appendChild(value_node)
+
+			root.appendChild(option_node)
+
+		return doc.toxml()
+
 class Option:
-	def __init__(self, node):
-		self.name   = node.getAttribute('name')
+	def __init__(self, name):
+		self.name   = name
 		self.values = []
 
+	def from_node(node):
+		option = Option(node.getAttribute('name'))
 		values = node.getElementsByTagName('value')
+
 		for value in values:
-			self.values.append(value.firstChild.nodeValue)
+			option.values.append(value.firstChild.nodeValue)
+
+		return option
+	from_node = staticmethod(from_node)
