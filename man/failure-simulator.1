@@ -1,0 +1,28 @@
+.TH failure-simulator 1 "January 2009" "failure-simulator 0.2" "User Commands"
+.SH NAME
+failure-simulator - simulate failures for configurations given in covering array
+.SH SYNOPSIS
+failure-simulator [OPTIONS] CONFIGURATION_MODEL COVERING_ARRAY FAILURE_PATTERNS
+.SH DESCRIPTION
+.TP
+.BI "-f " "FORMAT" ", --format=" "FORMAT"
+output format: xml, arff or table [default: table]
+.TP
+.B --no-errors
+generate ARFF output for each test only
+.TP
+.BI "-o " "FILE" ", --output=" "FILE"
+output file (or basename for ARFF) [default: STDOUT]
+.TP
+.B -h, --help
+show this help message and exit
+.TP
+.B --version
+show program's version number and exit
+.SH AUTHOR
+Written by Can Berk Guder.
+.SH COPYRIGHT
+Copyright \(co 2009 Can Berk Guder.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+.PP
+This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.

@@ -1,0 +1,37 @@
+.TH failure-generator 1 "January 2009" "failure-generator 0.2" "User Commands"
+.SH NAME
+failure-generator - generate failure patterns from configuration models
+.SH SYNOPSIS
+failure-generator [OPTIONS] CONFIGURATION_MODEL
+.SH DESCRIPTION
+.TP
+.BI "-e " "NUM" ", --errors=" "NUM"
+number of errors [default: 2]
+.TP
+.BI "-f " "FAILURES" ", --failures=" "FAILURES"
+number and size of failures (e.g. 2x2,3x5) [default: 2x2]
+.TP
+.BI "--min-coverage=" "NUM"
+minimum option coverage [default: 10%]
+.TP
+.BI "--max-coverage=" "NUM"
+maximum option coverage [default: 80%]
+.TP
+.BI "--min-failures=" "NUM"
+minimum failures per test [default: 1]
+.TP
+.BI "--max-failures=" "NUM"
+maximum failures per test [default: 2]
+.TP
+.B -h, --help
+show this help message and exit
+.TP
+.B --version
+show program's version number and exit
+.SH AUTHOR
+Written by Can Berk Guder.
+.SH COPYRIGHT
+Copyright \(co 2009 Can Berk Guder.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+.PP
+This is free software: you are free to change and redistribute it. There is NO WARRANTY, to the extent permitted by law.
