@@ -125,7 +125,8 @@ def generate_failures(options, args):
 		random.shuffle(failures)
 
 	if tests == None:
-		print "ERROR: Cannot find test configuration."
+		sys.stderr.write('ERROR: Cannot find test configuration.\n')
+		sys.stderr.flush()
 		sys.exit(1)
 
 	# Eliminate some options to make sure we don't exceed maximum option coverage
@@ -147,7 +148,8 @@ def generate_failures(options, args):
 				for option in picked_options:
 					available_options.remove(option)
 			except:
-				print "ERROR: Number of requested options exceeds the number of available options."
+				sys.stderr.write('ERROR: Number of requested options exceeds the number of available options.\n')
+				sys.stderr.flush()
 				sys.exit(1)
 
 			picked_values = [random.choice(option.values) for option in picked_options]
@@ -156,7 +158,8 @@ def generate_failures(options, args):
 			try:
 				error = random.choice(available_errors)
 			except:
-				print "ERROR: Number of requested failures exceeds the number of errors."
+				sys.stderr.write('ERROR: Number of requested failures exceeds the number of errors.\n')
+				sys.stderr.flush()
 				sys.exit(1)
 
 			available_errors.remove(error)
