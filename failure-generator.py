@@ -56,7 +56,7 @@ def main():
 
 	if len(args) < 1:
 		parser.print_help()
-		sys.exit()
+		sys.exit(2)
 
 	if options.tidy:
 		import tidy
@@ -126,7 +126,7 @@ def generate_failures(options, args):
 
 	if tests == None:
 		print "ERROR: Cannot find test configuration."
-		sys.exit()
+		sys.exit(1)
 
 	# Eliminate some options to make sure we don't exceed maximum option coverage
 	c = len(options)
@@ -148,7 +148,7 @@ def generate_failures(options, args):
 					available_options.remove(option)
 			except:
 				print "ERROR: Number of requested options exceeds the number of available options."
-				sys.exit()
+				sys.exit(1)
 
 			picked_values = [random.choice(option.values) for option in picked_options]
 			pattern = FailurePattern()
@@ -157,7 +157,7 @@ def generate_failures(options, args):
 				error = random.choice(available_errors)
 			except:
 				print "ERROR: Number of requested failures exceeds the number of errors."
-				sys.exit()
+				sys.exit(1)
 
 			available_errors.remove(error)
 			pattern.result = 'e%d' % error

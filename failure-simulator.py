@@ -31,7 +31,7 @@ def main():
 
 	if len(args) < 3:
 		parser.print_help()
-		sys.exit()
+		sys.exit(2)
 
 	if options.tidy:
 		import tidy
