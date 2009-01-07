@@ -113,17 +113,15 @@ def generate_failures(options, args):
 	failures = sum([[f[1]] * f[0] for f in args.failures], [])
 
 	# Generate test-failure configuration
-	for P in list_partitions(len(failures), range(args.min_failures, args.max_failures+1)):
-		if tests != None:
-			break
+	P = greedy_partition(len(failures), range(args.min_failures, args.max_failures+1))
 
-		# 6 is completely arbitrary
-		for i in range(6):
-			temp_tests = slice_list(failures, P)
-			if args.min_coverage <= min_coverage(temp_tests, options) <= args.max_coverage:
-				tests = temp_tests
-				break
-			random.shuffle(failures)
+	# 6 is completely arbitrary
+	for i in range(6):
+		temp_tests = slice_list(failures, P)
+		if args.min_coverage <= min_coverage(temp_tests, options) <= args.max_coverage:
+			tests = temp_tests
+			break
+		random.shuffle(failures)
 
 	if tests == None:
 		print "ERROR: Cannot find test configuration."
@@ -168,26 +166,19 @@ def generate_failures(options, args):
 		failure_model.tests.append(test)
 	return failure_model
 
-def partitions(n):
-	"""Integer partitions of n, in reverse lexicographic order."""
-	if n == 0:
-		yield []
-	if n <= 0:
-		return
-	for p in partitions(n-1):
-		if len(p) == 1 or (len(p) > 1 and p[-1] < p[-2]):
-			p[-1] += 1
-			yield p
-			p[-1] -= 1
-		p.append(1)
-		yield p
-		p.pop()
+def greedy_partition(n, L):
+	partition = []
 
-def list_partitions(n, L):
-	sL = set(L)
-	for p in partitions(n):
-		if len(set(p) - sL) == 0:
-			yield p
+	while n > 0:
+		try:
+			p = max([l for l in L if l <= n])
+		except:
+			return None
+
+		n -= p
+		partition.append(p)
+
+	return partition
 
 def min_coverage(tests, options):
 	coverage = max([sum(test) for test in tests])
