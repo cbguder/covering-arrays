@@ -8,12 +8,6 @@ from xml.dom.minidom import Document
 from models import *
 from generators import *
 
-use_tidy = True
-try:
-	import tidy
-except ImportError:
-	use_tidy = False
-
 def main():
 	parser = OptionParser(usage='Usage: %prog [options] MODEL COVERING_ARRAY FAILURE_PATTERNS',
 	                      version='%prog 0.2')
@@ -27,12 +21,20 @@ def main():
 	                  action='store_false',
 	                  dest='errors',
 					  help='generate ARFF output for each test only')
-	parser.set_defaults(format='table', errors=True)
+	parser.add_option('-t', '--tidy',
+	                  action='store_true',
+	                  help='use uTidyLib to generate pretty output')
+	parser.set_defaults(format='table',
+	                    errors=True,
+	                    tidy=False)
 	(options, args) = parser.parse_args()
 
 	if len(args) < 3:
 		parser.print_help()
 		sys.exit()
+
+	if options.tidy:
+		import tidy
 
 	config_model   = ConfigurationModel.from_xml(args[0])
 	covering_array = parse_csv(args[1])
@@ -56,7 +58,7 @@ def main():
 	elif options.format == 'xml':
 		generator = XMLGenerator(test_runs)
 		output = generator.generate()
-		if use_tidy:
+		if options.tidy:
 			output = str(tidy.parseString(output, input_xml=True, indent=True)).strip()
 
 	if options.output == None:

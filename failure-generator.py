@@ -6,12 +6,6 @@ from optparse import OptionParser, OptionValueError
 
 from models import *
 
-use_tidy = True
-try:
-	import tidy
-except ImportError:
-	use_tidy = False
-
 def main():
 	parser = OptionParser(usage='Usage: %prog [options] CONFIGURATION_MODEL',
 						  version='%prog 0.2')
@@ -48,24 +42,31 @@ def main():
 					  action='callback',
 					  callback=coverage_callback,
 					  help='maximum option coverage [default: 80%]')
+	parser.add_option('-t', '--tidy',
+	                  action='store_true',
+	                  help='use uTidyLib to generate pretty output')
 	parser.set_defaults(errors=2,
 						failures=[(2,2)],
 						min_failures=1,
 						max_failures=2,
 						min_coverage=10,
-						max_coverage=80)
+						max_coverage=80,
+	                    tidy=False)
 	(options, args) = parser.parse_args()
 
 	if len(args) < 1:
 		parser.print_help()
 		sys.exit()
 
+	if options.tidy:
+		import tidy
+
 	configuration_model = ConfigurationModel.from_xml(args[0])
 
 	failure_model = generate_failures(configuration_model.options, options)
 	output = failure_model.to_xml()
 
-	if use_tidy:
+	if options.tidy:
 		print str(tidy.parseString(output, input_xml=True, indent=True)),
 	else:
 		print output
