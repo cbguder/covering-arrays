@@ -18,17 +18,11 @@ def main():
 					  action='callback',
 					  callback=parse_failures,
 					  help='number and size of failures (e.g. 2x2,3x5) [default: 2x2]')
-	parser.add_option('--min-failures',
-					  type='int',
-					  metavar='NUM',
-					  action='callback',
-					  callback=failures_callback,
-					  help='minimum failures per test [default: 1]')
 	parser.add_option('--max-failures',
 					  type='int',
 					  metavar='NUM',
 					  action='callback',
-					  callback=failures_callback,
+					  callback=max_failures_callback,
 					  help='maximum failures per test [default: 2]')
 	parser.add_option('--min-coverage',
 					  type='int',
@@ -47,7 +41,6 @@ def main():
 	                  help='use uTidyLib to generate pretty output')
 	parser.set_defaults(errors=2,
 						failures=[(2,2)],
-						min_failures=1,
 						max_failures=2,
 						min_coverage=10,
 						max_coverage=80,
@@ -86,13 +79,9 @@ def parse_failures(option, opt, value, parser):
 			raise OptionValueError('option %s: invalid value: %s' % (opt, value))
 	setattr(parser.values, option.dest, result)
 
-def failures_callback(option, opt_str, value, parser):
+def max_failures_callback(option, opt_str, value, parser):
 	if value < 1:
 		raise OptionValueError('option %s: value < 1' % opt_str)
-
-	if (option.dest == 'min_failures' and value > parser.values.max_failures) or \
-	   (option.dest == 'max_failures' and value < parser.values.min_failures):
-			raise OptionValueError('option min-failures > max-failures')
 
 	setattr(parser.values, option.dest, value)
 
