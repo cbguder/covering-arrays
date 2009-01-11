@@ -71,7 +71,7 @@ def main():
 	else:
 		if options.format == 'arff':
 			for k, v in output.iteritems():
-				filename = '%s.%s.arff' % (options.output, k)
+				filename = '%s-%s.arff' % (options.output, k)
 				f = open(filename, 'w')
 				f.write(v)
 				f.write('\n')
@@ -89,7 +89,7 @@ def generate_test_runs(configuration_model, covering_array, failure_patterns):
 		for test in failure_patterns:
 			result = test.run_with_configuration(test_configuration)
 			test_run['results'][test.name] = result
-			test_runs.append(test_run)
+		test_runs.append(test_run)
 
 	return test_runs
 
