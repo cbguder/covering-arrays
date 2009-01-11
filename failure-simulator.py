@@ -94,9 +94,9 @@ def generate_test_runs(configuration_model, covering_array, failure_patterns):
 	return test_runs
 
 def parse_csv(file):
-	f      = open(file, 'rb')
+	f      = open(file)
 	reader = DictReader(f)
-	rows   = [row for row in reader]
+	rows   = [row for row in reader if 'DC.DC' not in row.values()]
 	f.close()
 
 	return rows
