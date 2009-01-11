@@ -9,5 +9,5 @@
 <!ATTLIST pattern result      CDATA #REQUIRED>
 <!ATTLIST pattern probability CDATA #IMPLIED "1.0">
 
-<!ELEMENT option (#PCDATA)>
+<!ELEMENT option (#PCDATA?)>
 <!ATTLIST option name CDATA #REQUIRED>

@@ -1,14 +1,17 @@
 #!/usr/bin/env python
 
 import sys
+import math
 import random
 from optparse import OptionParser, OptionValueError
 
 from models import *
 
+PREC_PROBABILITY = 100
+
 def main():
 	parser = OptionParser(usage='Usage: %prog [options] CONFIGURATION_MODEL',
-						  version='%prog 0.2')
+						  version='%prog 0.3')
 	parser.add_option('-e', '--errors',
 					  type='int',
 					  metavar='NUM',
@@ -99,48 +102,32 @@ def coverage_callback(option, opt_str, value, parser):
 	setattr(parser.values, option.dest, value)
 
 def generate_failures(options, args):
-	tests = None
+	tests = []
 	failures = sum([[f[1]] * f[0] for f in args.failures], [])
 
-	# Generate test-failure configuration
-	P = greedy_partition(len(failures), range(args.min_failures, args.max_failures+1))
+	while len(failures) > 0:
+		tests.append(failures[:args.max_failures])
+		failures = failures[args.max_failures:]
 
-	# 6 is completely arbitrary
-	for i in range(6):
-		temp_tests = slice_list(failures, P)
-		if args.min_coverage <= min_coverage(temp_tests, options) <= args.max_coverage:
-			tests = temp_tests
-			break
-		random.shuffle(failures)
-
-	if tests == None:
-		sys.stderr.write('ERROR: Cannot find test configuration.\n')
-		sys.stderr.flush()
-		sys.exit(1)
-
-	# Eliminate some options to make sure we don't exceed maximum option coverage
-	c = len(options)
-	to_eliminate = c - c * args.max_coverage / 100
-	eliminated = random.sample(options, to_eliminate)
-	for option in eliminated:
-		options.remove(option)
+	min_options = int(math.ceil(len(options) * args.min_coverage / 100.0))
+	max_options = len(options) * args.max_coverage / 100
 
 	failure_model = FailureModel()
 	for i, t in enumerate(tests):
 		test = Test()
 		test.name = 't%d' % (i+1)
 		available_errors  = range(1, args.errors+1)
-		available_options = options[:]
-		for size in t:
-			try:
-				picked_options = random.sample(available_options, size)
-				for option in picked_options:
-					available_options.remove(option)
-			except:
-				sys.stderr.write('ERROR: Number of requested options exceeds the number of available options.\n')
-				sys.stderr.flush()
-				sys.exit(1)
 
+		try:
+			n_options = random.randrange(max(max(t), min_options), max_options+1)
+			test.options = sorted(random.sample(options, n_options))
+		except:
+			sys.stderr.write('ERROR: Cannot find test configuration.\n')
+			sys.stderr.flush()
+			sys.exit(1)
+
+		for size in t:
+			picked_options = random.sample(test.options, size)
 			picked_values = [random.choice(option.values) for option in picked_options]
 			pattern = FailurePattern()
 
@@ -153,37 +140,12 @@ def generate_failures(options, args):
 
 			available_errors.remove(error)
 			pattern.result = 'e%d' % error
+			pattern.probability = int(random.random() * PREC_PROBABILITY) / float(PREC_PROBABILITY)
 			for k in range(size):
 				pattern.options[picked_options[k].name] = picked_values[k]
 			test.patterns.append(pattern)
 		failure_model.tests.append(test)
 	return failure_model
-
-def greedy_partition(n, L):
-	partition = []
-
-	while n > 0:
-		try:
-			p = max([l for l in L if l <= n])
-		except:
-			return None
-
-		n -= p
-		partition.append(p)
-
-	return partition
-
-def min_coverage(tests, options):
-	coverage = max([sum(test) for test in tests])
-	return 100.0 * coverage / len(options)
-
-def slice_list(L, P):
-	result = []
-	i = 0
-	for p in P:
-		result.append(L[i:i+p])
-		i += p
-	return result
 
 if __name__ == '__main__':
 	main()

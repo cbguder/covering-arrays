@@ -29,9 +29,19 @@ class FailureModel:
 			test_node = doc.createElement('test')
 			test_node.setAttribute('name', test.name)
 
+			options_node = doc.createElement('options')
+
+			for option in test.options:
+				option_node = doc.createElement('option')
+				option_node.setAttribute('name', option.name)
+				options_node.appendChild(option_node)
+
+			test_node.appendChild(options_node)
+
 			for pattern in test.patterns:
 				pattern_node = doc.createElement('pattern')
 				pattern_node.setAttribute('result', pattern.result)
+				pattern_node.setAttribute('probability', str(pattern.probability))
 
 				for k,v in pattern.options.iteritems():
 					option_node = doc.createElement('option')
@@ -50,10 +60,15 @@ class Test:
 	def __init__(self):
 		self.name     = ''
 		self.patterns = []
+		self.options  = []
 
 	def from_node(node):
 		test = Test()
 		test.name = node.getAttribute('name')
+
+		for child in node.childNodes:
+			if child.nodeType == child.ELEMENT_NODE and child.tagName == 'option':
+				test.options.append(child.getAttribute('name'))
 
 		patterns = node.getElementsByTagName('pattern')
 		for pattern in patterns:
@@ -63,7 +78,6 @@ class Test:
 	from_node = staticmethod(from_node)
 
 	def run_with_configuration(self, configuration):
-		# TODO: What if it holds for more than one pattern?
 		for pattern in self.patterns:
 			all_hold = True
 			for name, value in pattern.options.iteritems():
