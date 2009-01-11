@@ -1,9 +1,11 @@
-<!ELEMENT patterns (test*)>
+<!ELEMENT patterns (test+)>
 
-<!ELEMENT test (pattern*)>
+<!ELEMENT test (options, pattern+)>
 <!ATTLIST test name ID #REQUIRED>
 
-<!ELEMENT pattern (option*)>
+<!ELEMENT options (option+)>
+
+<!ELEMENT pattern (option+)>
 <!ATTLIST pattern result      CDATA #REQUIRED>
 <!ATTLIST pattern probability CDATA #IMPLIED "1.0">
 

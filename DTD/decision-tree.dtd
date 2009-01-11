@@ -1,9 +1,9 @@
-<!ELEMENT DecisionTree (Test*)>
+<!ELEMENT decisiontree (test+)>
 
-<!ELEMENT Test (Test+|Output)>
-<!ATTLIST Test attribute CDATA #REQUIRED>
-<!ATTLIST Test operator  CDATA #REQUIRED>
-<!ATTLIST Test value     CDATA #REQUIRED>
+<!ELEMENT test (test+|output)>
+<!ATTLIST test attribute CDATA #REQUIRED>
+<!ATTLIST test operator  CDATA #REQUIRED>
+<!ATTLIST test value     CDATA #REQUIRED>
 
-<!ELEMENT Output EMPTY>
-<!ATTLIST Output decision CDATA #REQUIRED>
+<!ELEMENT output EMPTY>
+<!ATTLIST output decision CDATA #REQUIRED>
