@@ -1,0 +1,9 @@
+#!/bin/bash
+
+TARGET="./test/final/configuration_models"
+
+for num_options in `seq 5 5 20`; do
+	for num_values in `seq 2 5`; do
+		./configuration-generator.py $num_options $num_values > $TARGET/$num_options-$num_values.xml
+	done
+done
