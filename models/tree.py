@@ -16,7 +16,7 @@ class DecisionTree:
 
 	def to_xml(self):
 		doc  = Document()
-		root = doc.createElement('DecisionTree')
+		root = doc.createElement('decisiontree')
 
 		for child in self.children:
 			root.appendChild(child.to_xml_node(doc))
@@ -83,7 +83,7 @@ class DecisionTreeNode:
 		return None
 
 	def to_xml_node(self, doc):
-		node = doc.createElement('Test')
+		node = doc.createElement('test')
 		node.setAttribute('attribute', self.option)
 		node.setAttribute('operator',  self.operator)
 		node.setAttribute('value',     str(self.value))
@@ -92,7 +92,7 @@ class DecisionTreeNode:
 			for child in self.children:
 				node.appendChild(child.to_xml_node(doc))
 		else:
-			output = doc.createElement('Output')
+			output = doc.createElement('output')
 			output.setAttribute('result', self.result)
 			node.appendChild(output)
 
