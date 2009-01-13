@@ -14,7 +14,7 @@ for file in os.listdir('test/final/failure_patterns'):
 			if os.path.exists(covering_array):
 				p = Popen(['./failure-simulator.py',
 				           '--format=table',
-				           '--output=test/final/simulation_results/%s-%d.table' % (file[:-4], t),
+				           '--output=test/final/simulation_results/table/%s-%d.table' % (file[:-4], t),
 				           configuration_model,
 				           covering_array,
 				           failure_pattern])
