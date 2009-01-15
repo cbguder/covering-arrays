@@ -24,6 +24,7 @@ class DecisionTree:
 
 		return doc.toxml()
 
+	@staticmethod
 	def from_file(file):
 		lines = [line.strip() for line in file]
 
@@ -58,7 +59,6 @@ class DecisionTree:
 				stack[-1].children.append(node)
 
 		return dtree
-	from_file = staticmethod(from_file)
 
 class DecisionTreeNode:
 	def __init__(self, option, operator, value, result = None):

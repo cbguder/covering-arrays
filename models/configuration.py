@@ -7,6 +7,7 @@ class ConfigurationModel:
 	def __init__(self):
 		self.options = []
 
+	@staticmethod
 	def from_xml(xml_file):
 		model   = ConfigurationModel()
 		dom     = _parse(xml_file)
@@ -17,7 +18,6 @@ class ConfigurationModel:
 		dom.unlink()
 
 		return model		
-	from_xml = staticmethod(from_xml)
 
 	def to_xml(self):
 		doc = Document()
@@ -43,6 +43,7 @@ class Option:
 		self.name   = name
 		self.values = []
 
+	@staticmethod
 	def from_node(node):
 		option = Option(node.getAttribute('name'))
 		values = node.getElementsByTagName('value')
@@ -51,4 +52,3 @@ class Option:
 			option.values.append(value.firstChild.nodeValue)
 
 		return option
-	from_node = staticmethod(from_node)

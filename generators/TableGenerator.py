@@ -31,6 +31,7 @@ class TableGenerator:
 
 		return table
 
+	@staticmethod
 	def array_to_ascii_table(table):
 		output = []
 		num_columns   = len(table[0])
@@ -47,4 +48,3 @@ class TableGenerator:
 		output.append(separator)
 	
 		return '\n'.join(output)
-	array_to_ascii_table = staticmethod(array_to_ascii_table)

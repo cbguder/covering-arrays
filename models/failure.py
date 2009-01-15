@@ -8,6 +8,7 @@ class FailureModel:
 	def __init__(self):
 		self.tests = []
 
+	@staticmethod
 	def from_xml(xml_file):
 		model = FailureModel()
 		dom   = _parse(xml_file)
@@ -18,7 +19,6 @@ class FailureModel:
 		dom.unlink()
 
 		return model
-	from_xml = staticmethod(from_xml)
 
 	def to_xml(self):
 		doc = Document()
@@ -62,6 +62,7 @@ class Test:
 		self.patterns = []
 		self.options  = []
 
+	@staticmethod
 	def from_node(node):
 		test = Test()
 		test.name = node.getAttribute('name')
@@ -75,7 +76,6 @@ class Test:
 			test.patterns.append(FailurePattern.from_node(pattern))
 
 		return test
-	from_node = staticmethod(from_node)
 
 	def run_with_configuration(self, configuration):
 		for pattern in self.patterns:
@@ -94,6 +94,7 @@ class FailurePattern:
 		self.probability = 1.0
 		self.options     = {}
 
+	@staticmethod
 	def from_node(node):
 		pattern = FailurePattern()
 		pattern.result      = node.getAttribute('result')
@@ -110,4 +111,3 @@ class FailurePattern:
 			pattern.options[name] = value
 
 		return pattern
-	from_node = staticmethod(from_node)
