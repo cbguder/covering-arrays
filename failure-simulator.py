@@ -56,7 +56,7 @@ def main():
 			else:
 				output[test.name] = generator.generate(test)
 	elif options.format == 'xml':
-		generator = XMLGenerator(test_runs)
+		generator = XMLGenerator(failure_model.tests, test_runs)
 		output = generator.generate()
 		if options.tidy:
 			output = str(tidy.parseString(output, input_xml=True, indent=True)).strip()

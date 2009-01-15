@@ -6,37 +6,34 @@ class XMLGenerator:
 	def __init__(self):
 		self.__init__(None)
 
-	def __init__(self, test_runs):
+	def __init__(self, tests, test_runs):
+		self.tests     = tests
 		self.test_runs = test_runs
 
 	def generate(self):
 		doc  = _Document()
 
-		root = doc.createElement('runs')
+		root = doc.createElement('results')
 		doc.appendChild(root)
 
-		for test_run in self.test_runs:
-			run           = doc.createElement('run')
-			configuration = doc.createElement('configuration')
-			results       = doc.createElement('results')
+		for test in self.tests:
+			test_node = doc.createElement('test')
+			test_node.setAttribute('name', test.name)
 
-			for k, v in test_run['configuration'].iteritems():
-				if k != '':
-					option = doc.createElement('option')
-					option.setAttribute('name', k)
-					value  = doc.createTextNode(v)
-					option.appendChild(value)
-					configuration.appendChild(option)
+			for test_run in self.test_runs:
+				configuration = doc.createElement('configuration')
+				configuration.setAttribute('result', test_run['results'][test.name])
 
-			for k, v in test_run['results'].iteritems():
-				test = doc.createElement('test')
-				test.setAttribute('name', k)
-				result = doc.createTextNode(v)
-				test.appendChild(result)
-				results.appendChild(test)
+				for k, v in test_run['configuration'].iteritems():
+					if k != '':
+						option = doc.createElement('option')
+						option.setAttribute('name', k)
+						value  = doc.createTextNode(v)
+						option.appendChild(value)
+						configuration.appendChild(option)
 
-			run.appendChild(configuration)
-			run.appendChild(results)
-			root.appendChild(run)
+				test_node.appendChild(configuration)
+
+			root.appendChild(test_node)
 
 		return doc.toxml()
