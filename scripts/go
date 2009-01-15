@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]; then
+	echo "USAGE: go CONFIGURATION_MODEL COVERING_ARRAY FAILURE_PATTERNS"
+	exit 2
+fi
+
+if [ ! -s $1 -o ! -s $2 -o ! -s $3 ]; then
+	echo "ERROR: One of the input files doesn't exist or is of zero size."
+	exit 1
+fi
+
+path=$(cd ${0%/*} && echo $PWD/${0##*/})
+root=$(readlink -m `dirname $path`/..)
+PATH=$root:$PATH
+
+tmp=/tmp/$$
+arff=$tmp.arff
+
+echo "Simulating failures..."
+failure-simulator.py --format=arff --output=$arff $1 $2 $3
+
+echo "Parsing results with WEKA..."
+for file in `ls $arff*`; do
+	java weka.classifiers.trees.J48 -t $file -i 2>/dev/null > $file.tree
+	if [ -s $file.tree ]; then
+		j48-parser.py $file.tree
+	else
+		echo "WEKA failed to generate decision tree for $file."
+	fi
+done
+
+rm -f $tmp*
