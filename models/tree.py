@@ -42,21 +42,21 @@ class DecisionTree:
 				level = 0
 				result = None
 				if m.group(1) != None:
-					level = len(m.group(1)) / 4
+					level = m.start(2) / 4
 				option   = m.group(2)
 				operator = m.group(3)
 				value    = int(m.group(4))
 				if m.group(5) != None:
 					result = m.group(6)
-				parent = None
-
-				if level < len(stack) - 1:
-					stack.pop()
-				elif level > len(stack) - 1:
-					stack.append(node)
 
 				node = DecisionTreeNode(option, operator, int(value), result)
-				stack[-1].children.append(node)
+
+				stack[level].children.append(node)
+
+				if level + 2 > len(stack):
+					stack.append(node)
+				else:
+					stack[level + 1] = node
 
 		return dtree
 
