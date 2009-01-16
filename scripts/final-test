@@ -1,0 +1,62 @@
+#!/bin/bash
+
+if [ $# -lt 3 ]; then
+	echo "USAGE: go CONFIGURATION_MODEL COVERING_ARRAY FAILURE_PATTERNS"
+	exit 2
+fi
+
+if [ ! -s $1 -o ! -s $2 -o ! -s $3 ]; then
+	echo "ERROR: One of the input files doesn't exist or is of zero size."
+	exit 1
+fi
+
+path=$(cd ${0%/*} && echo $PWD/${0##*/})
+root=$(readlink -m "`dirname "$path"`/..")
+PATH=$root:$PATH
+
+CONFIG=$1
+COVERING=$2
+FAILURE=$3
+
+RESULTS="simulation_results"
+
+TMP="/tmp/$$"
+mkdir $TMP
+
+F_TABLE="$RESULTS/table"
+F_XML="$RESULTS/xml"
+#F_ARFF="$RESULTS/arff"
+#F_TREE="$RESULTS/tree"
+F_ARFF=$TMP
+F_TREE=$TMP
+F_DTREE="$RESULTS/decision-tree"
+
+params=$(basename $FAILURE .xml)
+
+table="$F_TABLE/$params.table"
+xml="$F_XML/$params.xml"
+arff="$F_ARFF/$params"
+
+echo -n "$params: "
+
+echo -n "Simulate-"
+failure-simulator.py --format=table --output="$table" "$CONFIG" "$COVERING" "$FAILURE"
+table-to-xml.py "$FAILURE" "$table" > "$xml"
+table-to-arff.py "$CONFIG" "$table" "$F_ARFF"
+
+echo -n "Weka-"
+IFS=$'\t\n'
+for file in $arff*; do
+	tree="$F_TREE/$(basename $file .arff).tree"
+	java weka.classifiers.trees.J48 -t "$file" -i 2>/dev/null > "$tree"
+	if [ ! -s "$tree" ]; then
+		echo "WEKA failed to generate decision tree for $file."
+		rm -f "$tree"
+	fi
+done
+
+echo "Parse-"
+j48-parser.py $F_TREE/$params.*.tree > "$F_DTREE/$params.xml"
+
+echo "rm"
+rm -rf $TMP
