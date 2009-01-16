@@ -7,7 +7,7 @@ from optparse import OptionParser
 from models import DecisionForest, DecisionTree
 
 def main():
-	parser = OptionParser(usage='Usage: %prog J48-TREE [J48-TREE...]',
+	parser = OptionParser(usage='Usage: %prog [OPTIONS] J48-TREE [J48-TREE...]',
 	                      version='%prog 0.2')
 	parser.add_option('-t', '--tidy',
 	                  action='store_true',

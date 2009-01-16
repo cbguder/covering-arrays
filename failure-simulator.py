@@ -9,7 +9,7 @@ from models import *
 from generators import *
 
 def main():
-	parser = OptionParser(usage='Usage: %prog [options] MODEL COVERING_ARRAY FAILURE_PATTERNS',
+	parser = OptionParser(usage='Usage: %prog [OPTIONS] CONFIGURATION_MODEL COVERING_ARRAY FAILURE_PATTERNS',
 	                      version='%prog 0.2')
 	parser.add_option('-o', '--output',
 	                  metavar='FILE',

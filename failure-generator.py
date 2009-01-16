@@ -10,7 +10,7 @@ from models import *
 PREC_PROBABILITY = 100
 
 def main():
-	parser = OptionParser(usage='Usage: %prog [options] CONFIGURATION_MODEL',
+	parser = OptionParser(usage='Usage: %prog [OPTIONS] CONFIGURATION_MODEL',
 						  version='%prog 0.3')
 	parser.add_option('-e', '--errors',
 					  type='int',
