@@ -1,9 +1,0 @@
-#!/bin/bash
-
-SRC="test/final/simulation_results/arff"
-DST="test/final/simulation_results/tree"
-
-for file in $SRC/*.arff; do
-	base=`basename $file .arff`
-	java weka.classifiers.trees.J48 -t $file -i > $DST/$base.tree
-done
