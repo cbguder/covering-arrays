@@ -1316,30 +1316,33 @@ namespace cs607_Proje
 
                     List<Item> ruleViolatingOptions = getRuleViolatingOptions(originalFailingConfig,TestOrder);
 
-                    List<List<string>> subsetOfFailingOptions = getSubset(ruleViolatingOptions);
-
-                    for (int subsetOrder = 0; subsetOrder < subsetOfFailingOptions.Count; subsetOrder++)
+                    if (ruleViolatingOptions != null)
                     {
-                        List<List<Item>> changeList = getTruthTable(subsetOfFailingOptions[subsetOrder]);
-                        for (int changeOrder = 0; changeOrder < changeList.Count; changeOrder++)
-                        {
-                            Configuration changedConfig = applyChange(originalFailingConfig, changeList[changeOrder]);
-                            bool configPasses = doesThisConfigPass(changedConfig, TestOrder);
+                        List<List<string>> subsetOfFailingOptions = getSubset(ruleViolatingOptions);
 
-                            if (configPasses)
+                        for (int subsetOrder = 0; subsetOrder < subsetOfFailingOptions.Count; subsetOrder++)
+                        {
+                            List<List<Item>> changeList = getTruthTable(subsetOfFailingOptions[subsetOrder]);
+                            for (int changeOrder = 0; changeOrder < changeList.Count; changeOrder++)
                             {
-                                if (!doesExistInScoreList(changedConfig))
+                                Configuration changedConfig = applyChange(originalFailingConfig, changeList[changeOrder]);
+                                bool configPasses = doesThisConfigPass(changedConfig, TestOrder);
+
+                                if (configPasses)
                                 {
-                                    int score = calculateScore(changedConfig, TestOrder);
-                                    if (score > 0)
+                                    if (!doesExistInScoreList(changedConfig))
                                     {
-                                        Triplet tr = new Triplet(originalFailingConfig, changedConfig, score);
-                                        TRIPLET_LIST.Add(tr);
+                                        int score = calculateScore(changedConfig, TestOrder);
+                                        if (score > 0)
+                                        {
+                                            Triplet tr = new Triplet(originalFailingConfig, changedConfig, score);
+                                            TRIPLET_LIST.Add(tr);
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
+                    }                    
 
                     TRIPLET_LIST.Sort(delegate(Triplet a, Triplet b) { return a.getScore().CompareTo(b.getScore()); });
 
@@ -1349,6 +1352,7 @@ namespace cs607_Proje
                         toAdd.setEqualTo(TRIPLET_LIST[TRIPLET_LIST.Count - 1].getChangedConf());
                         Configuration orig = new Configuration();
                         orig.setEqualTo(TRIPLET_LIST[TRIPLET_LIST.Count - 1].getOriginalConf());
+                                               
 
                         toAdd.setResult("p");
                         TESTCASE_LIST[TestOrder].addNewConfiguration(toAdd);
@@ -1358,6 +1362,8 @@ namespace cs607_Proje
                         Console.Write("**new**\t");
                         print(toAdd);
                         Console.Write("\n");
+
+                        TRIPLET_LIST.RemoveAt(TRIPLET_LIST.Count - 1);
 
                         if (CHOOSE_GLOBAL)
                         {
