@@ -11,7 +11,7 @@ if [ ! -s $1 -o ! -s $2 -o ! -s $3 ]; then
 fi
 
 path=$(cd ${0%/*} && echo $PWD/${0##*/})
-root=$(readlink -m `dirname $path`/..)
+root=$(readlink -m "`dirname "$path"`/..")
 PATH=$root:$PATH
 
 tmp=/tmp/$$
