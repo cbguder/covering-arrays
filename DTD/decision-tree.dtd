@@ -1,4 +1,8 @@
-<!ELEMENT decisiontree (test+)>
+<!ELEMENT forest (tree+)>
+
+<!ELEMENT tree (test+|output)>
+<!ATTLIST tree test  CDATA #REQUIRED>
+<!ATTLIST tree error CDATA #REQUIRED>
 
 <!ELEMENT test (test+|output)>
 <!ATTLIST test attribute CDATA #REQUIRED>

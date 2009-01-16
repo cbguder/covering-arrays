@@ -4,7 +4,7 @@ import re
 import sys
 from optparse import OptionParser
 
-from models import DecisionTree, DecisionTreeNode
+from models import DecisionForest, DecisionTree
 
 def main():
 	parser = OptionParser(usage='Usage: %prog J48-TREE',
@@ -22,11 +22,23 @@ def main():
 	if options.tidy:
 		import tidy
 
-	f = open(args[0])
-	dtree = DecisionTree.from_file(f)
-	f.close()
+	forest = DecisionForest()
 
-	output = dtree.to_xml()
+	for file in args:
+		test = error = ''
+		m = re.search('(t[0-9]+)_(e[0-9]+)', file)
+		if m:
+			test = m.group(1)
+			error = m.group(2)
+
+		f = open(file)
+		tree = DecisionTree.from_file(f)
+		tree.test  = test
+		tree.error = error
+		forest.trees.append(tree)
+		f.close()
+
+	output = forest.to_xml()
 
 	if options.tidy:
 		print str(tidy.parseString(output, input_xml=True, indent=True)),
