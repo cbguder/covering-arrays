@@ -31,7 +31,9 @@ F_ARFF=$TMP
 F_TREE=$TMP
 F_DTREE="$RESULTS/decision-tree"
 
-params=$(basename $FAILURE .xml)
+p1=$(basename $COVERING .csv)
+p2=$(echo `basename $FAILURE .xml` | cut -d - -f 2-)
+params="$p1-$p2"
 
 table="$F_TABLE/$params.table"
 xml="$F_XML/$params.xml"
@@ -55,8 +57,8 @@ for file in $arff*; do
 	fi
 done
 
-echo "Parse-"
+echo -n "Parse-"
 j48-parser.py $F_TREE/$params.*.tree > "$F_DTREE/$params.xml"
 
-echo "rm"
+echo "Clean"
 rm -rf $TMP
